@@ -1,6 +1,6 @@
 # [Udacity Blockchain Developer Nanodegree](https://www.udacity.com/course/blockchain-developer-nanodegree--nd1309)
 
-##Term I - Fundamentals
+## Term I - Fundamentals
 
 Learn to identify fundamental transaction types, build a web service and API, and secure digital assets with your blockchain identity. Create a private blockchain, and a notarization web service. Use your blockchain identity to secure digital assets on the Ethereum platform with a smart contract.
 
