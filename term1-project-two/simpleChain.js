@@ -57,10 +57,11 @@ class Blockchain{
 			return JSON.parse(await this.getBlockFromLevelDB(blockHeight));
     }
 
+
     // validate block
-    validateBlock(blockHeight){
+    async validateBlock(blockHeight){
       // get block object
-      let block = this.getBlock(blockHeight);
+      let block = await this.getBlock(blockHeight);
       // get block hash
       let blockHash = block.hash;
       // remove block hash to test block integrity
@@ -77,25 +78,25 @@ class Blockchain{
     }
 
    // Validate blockchain
-    validateChain(){
-      let errorLog = [];
-      for (var i = 0; i < this.chain.length-1; i++) {
-        // validate block
-        if (!this.validateBlock(i))errorLog.push(i);
-        // compare blocks hash link
-        let blockHash = this.chain[i].hash;
-        let previousHash = this.chain[i+1].previousBlockHash;
-        if (blockHash!==previousHash) {
-          errorLog.push(i);
-        }
-      }
-      if (errorLog.length>0) {
-        console.log('Block errors = ' + errorLog.length);
-        console.log('Blocks: '+errorLog);
-      } else {
-        console.log('No errors detected');
-      }
-    }
+  async validateChain(){
+		let errorLog = [];
+    const blockHeight = await this.getBlockHeightFromLevelDB();
+		for (let i = 0; i < blockHeight; i++) {
+		  this.validateBlock(i).then(isValid => {
+				if (!isValid) {
+					errorLog.push(i)
+				}
+				if (i == blockHeight -1) {
+					if (errorLog.length > 0) {
+						console.log('Number of block errors = ' + errorLog.length);
+						console.log('Blocks with errors: ' + errorLog);
+					} else {
+						console.log('Blockchain valid');
+					}
+				}
+			 });
+		}
+	}
 
  // Data Layer
  // Use LevelDB to persist blockchain
@@ -144,7 +145,6 @@ class Blockchain{
 |  Test adding and retrieval of blocks from peristent store                    |
 |																																							 |
 |  ===========================================================================*/
-
 let blockchain = new Blockchain();
 
 (function theLoop (i) {
@@ -154,3 +154,5 @@ let blockchain = new Blockchain();
     })
   }, 100);
 })(10);
+
+setTimeout(() => blockchain.validateChain(), 5000);
