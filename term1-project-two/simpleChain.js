@@ -86,6 +86,7 @@ class Blockchain{
 				if (!isValid) {
 					errorLog.push(i)
 				}
+
 				if (i == blockHeight -1) {
 					if (errorLog.length > 0) {
 						console.log('Number of block errors = ' + errorLog.length);
@@ -146,7 +147,6 @@ class Blockchain{
 |																																							 |
 |  ===========================================================================*/
 let blockchain = new Blockchain();
-
 (function theLoop (i) {
   setTimeout(function () {
     blockchain.addBlock(new Block('Block ' + i + ' added to levelDB')).then(() => {
@@ -155,4 +155,5 @@ let blockchain = new Blockchain();
   }, 100);
 })(10);
 
+//validate chain
 setTimeout(() => blockchain.validateChain(), 5000);
