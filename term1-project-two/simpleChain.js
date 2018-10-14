@@ -43,9 +43,9 @@ class Blockchain{
 		await this.saveBlockToLevelDB(newBlock.height, JSON.stringify(newBlock));
   }
 
-  // Get block height
-    getBlockHeight(){
-      return this.chain.length-1;
+    // Get block height
+    async getBlockHeight(){
+			return await this.getBlockHeightFromLevelDB() - 1;
     }
 
     // get block
@@ -120,6 +120,19 @@ class Blockchain{
       })
     })
   }
+	getBlockHeightFromLevelDB() {
+    return new Promise((resolve, reject) => {
+      let i = 0; //zero based height
+      db.createReadStream().on('data', (data) => {
+        i++
+      }).on('error', (err) => {
+				console.log('Unable to read data stream!', err)
+        reject(error)
+      }).on('close', () => {
+        resolve(i)
+      })
+    })
+  }
 } //Blochchain
 
 /* ===== Testing ==============================================================|
@@ -129,11 +142,10 @@ class Blockchain{
 |  ===========================================================================*/
 
 let blockchain = new Blockchain();
-blockchain.getBlock(0).then(block => console.log(block));
+blockchain.getBlock(0).then(block => console.log(block)).catch(err => console.log(err));
 blockchain.addBlock(new Block('Testing data 1'));
 blockchain.addBlock(new Block('Testing data 2'));
-
-//console.log(blockchain.getBlockHeight());
+blockchain.getBlockHeight().then((height) => console.log('Block height ' + height)).catch(err => console.log(err));
 //blockchain.validateBlock(0);
 //blockchain.validateChain(0);
 //console.log(blockchain.chain);
