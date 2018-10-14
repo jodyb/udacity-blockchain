@@ -12,7 +12,7 @@ class Block{
      this.height = 0,
      this.body = data,
      this.time = 0,
-     this.previousBlockHash = ""
+     this.previousBlockHash = "0x0"
     }
 }
 
@@ -21,25 +21,29 @@ class Block{
 |  ================================================*/
 
 class Blockchain{
-  constructor(){
-    this.chain = [];
-    this.addBlock(new Block("First block in the chain - Genesis block"));
+  constructor() {
+		this.getBlockHeight().then((blockHeight) => {
+		  if (blockHeight == -1) {
+			  console.log('Triggering Genesis block creation.');
+        this.addBlock(new Block("First block in the chain - Genesis block"));
+	    }
+	  });
   }
 
   // Add new block
   async addBlock(newBlock){
-    // Block height
-    newBlock.height = this.chain.length;
-    // UTC timestamp
+    const height = parseInt(await this.getBlockHeight());
+		newBlock.height = height + 1;
+		// UTC timestamp
     newBlock.time = new Date().getTime().toString().slice(0,-3);
     // previous block hash
-    if(this.chain.length>0){
-      newBlock.previousBlockHash = this.chain[this.chain.length-1].hash;
+    if(newBlock.height > 0){
+			const previousBlock = await this.getBlock(height);
+      newBlock.previousBlockHash = previousBlock.hash;
     }
     // Block hash with SHA256 using newBlock and converting to a string
     newBlock.hash = SHA256(JSON.stringify(newBlock)).toString();
     // Adding block object to chain
-  	this.chain.push(newBlock);
 		await this.saveBlockToLevelDB(newBlock.height, JSON.stringify(newBlock));
   }
 
@@ -122,12 +126,12 @@ class Blockchain{
   }
 	getBlockHeightFromLevelDB() {
     return new Promise((resolve, reject) => {
-      let i = 0; //zero based height
+      let i = 0; //trigger genesis block file empty;
       db.createReadStream().on('data', (data) => {
         i++
       }).on('error', (err) => {
 				console.log('Unable to read data stream!', err)
-        reject(error)
+        resolve(err);
       }).on('close', () => {
         resolve(i)
       })
@@ -142,10 +146,11 @@ class Blockchain{
 |  ===========================================================================*/
 
 let blockchain = new Blockchain();
-blockchain.getBlock(0).then(block => console.log(block)).catch(err => console.log(err));
-blockchain.addBlock(new Block('Testing data 1'));
-blockchain.addBlock(new Block('Testing data 2'));
-blockchain.getBlockHeight().then((height) => console.log('Block height ' + height)).catch(err => console.log(err));
-//blockchain.validateBlock(0);
-//blockchain.validateChain(0);
-//console.log(blockchain.chain);
+
+(function theLoop (i) {
+  setTimeout(function () {
+    blockchain.addBlock(new Block('Block ' + i + ' added to levelDB')).then(() => {
+      if (--i) theLoop(i);
+    })
+  }, 100);
+})(10);
