@@ -1,7 +1,3 @@
-/* ===== SHA256 with Crypto-js ===============================
-|  Learn more: Crypto-js: https://github.com/brix/crypto-js  |
-|  =========================================================*/
-
 const SHA256 = require('crypto-js/sha256');
 
 
@@ -96,3 +92,18 @@ class Blockchain{
       }
     }
 }
+
+/* ===== Testing ==============================================================|
+|                                                                              |
+|  Test adding and retrieval of blocks from peristent store                    |
+|																																							 |
+|  ===========================================================================*/
+
+let blockchain = new Blockchain();
+blockchain.addBlock(new Block('Testing data 1'));
+blockchain.addBlock(new Block('Testing data 2'));
+console.log(blockchain.getBlock(0));
+console.log(blockchain.getBlockHeight());
+blockchain.validateBlock(0);
+blockchain.validateChain(0);
+console.log(blockchain.chain);
