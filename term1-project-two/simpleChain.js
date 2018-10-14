@@ -1,10 +1,11 @@
 const SHA256 = require('crypto-js/sha256');
-
+const level = require('level');
+const chainDB = './chaindata';
+const db = level(chainDB);
 
 /* ===== Block Class ==============================
 |  Class with a constructor for block 			   |
 |  ===============================================*/
-
 class Block{
 	constructor(data){
      this.hash = "",
@@ -26,7 +27,7 @@ class Blockchain{
   }
 
   // Add new block
-  addBlock(newBlock){
+  async addBlock(newBlock){
     // Block height
     newBlock.height = this.chain.length;
     // UTC timestamp
@@ -39,6 +40,7 @@ class Blockchain{
     newBlock.hash = SHA256(JSON.stringify(newBlock)).toString();
     // Adding block object to chain
   	this.chain.push(newBlock);
+		await this.saveBlock(newBlock.height, JSON.stringify(newBlock))
   }
 
   // Get block height
@@ -91,7 +93,23 @@ class Blockchain{
         console.log('No errors detected');
       }
     }
-}
+
+ // Data Layer
+ // Use LevelDB to persist blockchain
+	saveBlock(key, value) {
+		return new Promise((resolve, reject) => {
+			db.put(key, value, function(err) {
+				if (err) {
+					console.log('Block ' + key + ' save to levelDB failed', err);
+					reject();
+				} else {
+					console.log('Block ' + key + ' saved to levelDB');
+					resolve();
+				}
+			})
+ 		})
+	}
+} //Blochchain
 
 /* ===== Testing ==============================================================|
 |                                                                              |
