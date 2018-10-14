@@ -40,7 +40,7 @@ class Blockchain{
     newBlock.hash = SHA256(JSON.stringify(newBlock)).toString();
     // Adding block object to chain
   	this.chain.push(newBlock);
-		await this.saveBlock(newBlock.height, JSON.stringify(newBlock))
+		await this.saveBlockToLevelDB(newBlock.height, JSON.stringify(newBlock));
   }
 
   // Get block height
@@ -49,9 +49,8 @@ class Blockchain{
     }
 
     // get block
-    getBlock(blockHeight){
-      // return object as a single string
-      return JSON.parse(JSON.stringify(this.chain[blockHeight]));
+    async getBlock(blockHeight){
+			return JSON.parse(await this.getBlockFromLevelDB(blockHeight));
     }
 
     // validate block
@@ -96,7 +95,7 @@ class Blockchain{
 
  // Data Layer
  // Use LevelDB to persist blockchain
-	saveBlock(key, value) {
+	saveBlockToLevelDB(key, value) {
 		return new Promise((resolve, reject) => {
 			db.put(key, value, function(err) {
 				if (err) {
@@ -109,6 +108,18 @@ class Blockchain{
 			})
  		})
 	}
+  getBlockFromLevelDB(key) {
+		return new Promise((resolve, reject) => {
+      db.get(key, function (err, value) {
+				if (err) {
+					console.log('Unable to retrieve Block ' + key + ' from levelDB', err);
+					reject(err);
+				} else {
+					resolve(value);
+				}
+      })
+    })
+  }
 } //Blochchain
 
 /* ===== Testing ==============================================================|
@@ -118,10 +129,11 @@ class Blockchain{
 |  ===========================================================================*/
 
 let blockchain = new Blockchain();
+blockchain.getBlock(0).then(block => console.log(block));
 blockchain.addBlock(new Block('Testing data 1'));
 blockchain.addBlock(new Block('Testing data 2'));
-console.log(blockchain.getBlock(0));
-console.log(blockchain.getBlockHeight());
-blockchain.validateBlock(0);
-blockchain.validateChain(0);
-console.log(blockchain.chain);
+
+//console.log(blockchain.getBlockHeight());
+//blockchain.validateBlock(0);
+//blockchain.validateChain(0);
+//console.log(blockchain.chain);
