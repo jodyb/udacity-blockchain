@@ -32,8 +32,6 @@ http://localhost:8000/block/[blockheight]
 ```
 http://localhost:8000/block/0, where '0' is the block height.
 ```
-*Response*
-The response for the endpoint should provide block object is JSON format.
 
 *Example GET Response - for http://localhost:8000/block/0*
 ```
@@ -43,21 +41,57 @@ cache-control: no-cache
 content-length: 179
 accept-ranges: bytes
 Connection: close          
-{"hash":"49cce61ec3e6ae664514d5fa5722d86069cf981318fc303750ce66032d0acff3","height":0,"body":"First block in the chain - Genesis block","time":"1530311457","previousBlockHash":""}
+{ "hash":"49cce61ec3e6ae664514d5fa5722d86069cf981318fc303750ce66032d0acff3",
+  "height":0,"body":"First block in the chain - Genesis block",
+  "time":"1530311457",
+  "previousBlockHash":""
+}
 ```
 **POST Block Endpoint**
 
+*URL*
 Post a new block with data payload option to add data to the block body. The block body should support a string of text. The response for the endpoint should provide block object in JSON format.
 
-Response
-The response for the endpoint should provide block object in JSON format.
 
-Example POST response
-For URL: http://localhost:8000/block
-
+*Example POST response - for: http://localhost:8000/block*
+```
 HTTP/1.1 200 OK
 content-type: application/json; charset=utf-8
 cache-control: no-cache
 content-length: 238
 Connection: close
-{"hash":"ffaffeb2330a12397acc069791323783ef1a1c8aab17ccf2d6788cdab0360b90","height":1,"body":"Testing block with test string data","time":"1531764891","previousBlockHash":"49cce61ec3e6ae664514d5fa5722d86069cf981318fc303750ce66032d0acff3"}
+{"hash":"ffaffeb2330a12397acc069791323783ef1a1c8aab17ccf2d6788cdab0360b90",
+ "height":1,"body":"Testing block with test string  data","time":"1531764891",
+ "previousBlockHash":"49cce61ec3e6ae664514d5fa5722d86069cf981318fc303750ce66032d0acff3"
+}
+```
+
+## Installation
+
+Install dependent node packages
+
+```
+npm install
+```
+
+## Testing
+
+Start the Sails application:
+
+```
+sails lift
+```
+
+Using [Postman](https://www.getpostman.com/) or a similar tool, send requests to the endpoints as follows:
+
+GET /block/{BLOCK_HEIGHT}
+
+```
+ curl http://localhost:8000/block/0
+```
+
+POST /block
+
+```
+curl -X "POST" "http://localhost:8000/block" -H 'Content-Type: application/json' -d $'{"description":"Block description"}'
+```
