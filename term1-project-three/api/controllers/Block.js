@@ -1,4 +1,6 @@
-
+/* ===== Blockchain ==========================
+|  Class with a constructor for new block 		|
+|  ===========================================*/
 class Block {
   constructor (data) {
     this.hash = '';

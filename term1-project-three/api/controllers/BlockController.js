@@ -16,6 +16,7 @@
       try {
         //get description from req params
         let {description} = req.allParams();
+        //check that description is present
         if (!description) {
           return res.badRequest({err: 'block description is required'});
         }
@@ -37,6 +38,7 @@
       //get requested height from req params
       let {height} = req.allParams();
       global.blockchain.getBlockHeight().then((blockHeight) => {
+        //check for valid blockheight
         if (height < 0 || height > blockHeight) {
           return res.badRequest({err: 'request outside of block range'});
         }

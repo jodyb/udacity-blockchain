@@ -10,7 +10,7 @@
 
 module.exports = {
 
-  //Step 2: Configure API Service to run on port 8000
+  //Configure API Service to run on port 8000
   port: process.env.PORT || 8000
 
 };
