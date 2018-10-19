@@ -32,7 +32,7 @@ class Blockchain{
     // Block hash with SHA256 using newBlock and converting to a string
     newBlock.hash = SHA256(JSON.stringify(newBlock)).toString();
     // Adding block object to chain
-		await this.saveBlockToLevelDB(newBlock.height, JSON.stringify(newBlock));
+		return await this.saveBlockToLevelDB(newBlock.height, JSON.stringify(newBlock));
   }
 
     // Get block height
@@ -97,7 +97,7 @@ class Blockchain{
 					reject();
 				} else {
 					console.log('Block ' + key + ' saved to levelDB');
-					resolve();
+					resolve(JSON.parse(value));
 				}
 			})
  		})

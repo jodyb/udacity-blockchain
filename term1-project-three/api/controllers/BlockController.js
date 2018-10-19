@@ -6,7 +6,8 @@
  */
  const Block = require("./Block");
  const Blockchain = require("./Blockchain");
- 
+ global.blockchain = global.blockchain || new Blockchain();
+
  module.exports = {
   /**
    * `BlockController.create()`
@@ -18,24 +19,22 @@
         if (!description) {
           return res.badRequest({err: 'block description is required'});
         }
-        //create a new block
-        let newBlock = new Block(description);
 
-        //add to blockchain
-
-        //return the new block in response
-        return res.ok('all good');
+        //add block
+        global.blockchain.addBlock(new Block(description)).then((block) => {
+          return res.ok(block);
+        })
       } catch (err) {
         return res.serverError(err);
       }
   },
 
   /**
-   * `BlockController.find()`
+   * `BlockController.findOne()`
    */
-  find: async function (req, res) {
+  findOne: async function (req, res) {
     return res.json({
-      todo: 'find() is not implemented yet!'
+      todo: 'findOne() is not implemented yet!'
     });
   }
 
