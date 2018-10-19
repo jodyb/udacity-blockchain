@@ -23,18 +23,20 @@ Understanding web APIs and ways to create them will help you build user applicat
 
 **GET Block Endpoint**
 
-URL
+*URL*
+```
 http://localhost:8000/block/[blockheight]
+```
 
-Example URL path:
+*Example URL path:*
+```
 http://localhost:8000/block/0, where '0' is the block height.
-
-Response
+```
+*Response*
 The response for the endpoint should provide block object is JSON format.
 
-Example GET Response
-For URL, http://localhost:8000/block/0
-
+*Example GET Response - for http://localhost:8000/block/0*
+```
 HTTP/1.1 200 OK
 content-type: application/json; charset=utf-8
 cache-control: no-cache
@@ -42,7 +44,7 @@ content-length: 179
 accept-ranges: bytes
 Connection: close          
 {"hash":"49cce61ec3e6ae664514d5fa5722d86069cf981318fc303750ce66032d0acff3","height":0,"body":"First block in the chain - Genesis block","time":"1530311457","previousBlockHash":""}
-
+```
 **POST Block Endpoint**
 
 Post a new block with data payload option to add data to the block body. The block body should support a string of text. The response for the endpoint should provide block object in JSON format.
