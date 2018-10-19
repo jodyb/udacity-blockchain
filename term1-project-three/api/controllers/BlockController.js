@@ -33,9 +33,19 @@
    * `BlockController.findOne()`
    */
   findOne: async function (req, res) {
-    return res.json({
-      todo: 'findOne() is not implemented yet!'
-    });
+    try {
+      //get requested height from req params
+      let {height} = req.allParams();
+      global.blockchain.getBlockHeight().then((blockHeight) => {
+        if (height < 0 || height > blockHeight) {
+          return res.badRequest({err: 'request outside of block range'});
+        }
+        global.blockchain.getBlock(height).then((block) => {
+          return res.ok(block);
+        })
+      })
+    } catch (err) {
+      return res.serverError(err);
+    }
   }
-
 };
