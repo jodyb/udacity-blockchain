@@ -1,4 +1,4 @@
-### Term One -  Project 3: RESTful Web API with Node.js Framework
+# Term One -  Project 3: RESTful Web API with Node.js Framework
 
 ## Project Introduction
 Your next challenge is to build a RESTful API using a Node.js framework that will interfaces with the private blockchain By configuring an API for your private blockchain you expose functionality that can be consumed by several types of web clients ranging from desktop, mobile, and IoT devices. For your next project, you will be creating a RESTful web API for your private blockchain. The API project will require two endpoints:
