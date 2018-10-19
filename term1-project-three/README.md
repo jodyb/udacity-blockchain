@@ -21,7 +21,7 @@ Understanding web APIs and ways to create them will help you build user applicat
 
 ## API Endpoints
 
-# GET Block Endpoint
+**GET Block Endpoint**
 
 URL
 http://localhost:8000/block/[blockheight]
@@ -43,7 +43,7 @@ accept-ranges: bytes
 Connection: close          
 {"hash":"49cce61ec3e6ae664514d5fa5722d86069cf981318fc303750ce66032d0acff3","height":0,"body":"First block in the chain - Genesis block","time":"1530311457","previousBlockHash":""}
 
-# POST Block Endpoint
+**POST Block Endpoint**
 
 Post a new block with data payload option to add data to the block body. The block body should support a string of text. The response for the endpoint should provide block object in JSON format.
 
