@@ -15,14 +15,14 @@
   create: async function (req, res) {
       try {
         //get description from req params
-        let {description} = req.allParams();
+        let {body} = req.allParams();
         //check that description is present
-        if (!description) {
+        if (!body) {
           return res.badRequest({err: 'block description is required'});
         }
 
         //add block
-        global.blockchain.addBlock(new Block(description)).then((block) => {
+        global.blockchain.addBlock(new Block(body)).then((block) => {
           return res.ok(block);
         })
       } catch (err) {
