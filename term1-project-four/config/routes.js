@@ -29,7 +29,9 @@ module.exports.routes = {
 
   'GET /': 'HomeController.index',
   'POST /block': 'BlockController.create',
-  'GET /block/:height': 'BlockController.findOne'
+  'GET /block/:height': 'BlockController.findOne',
+  'POST /requestValidation': 'ValidationController.requestValidation'
+
 
   //  ╦ ╦╔═╗╔╗ ╦ ╦╔═╗╔═╗╦╔═╔═╗
   //  ║║║║╣ ╠╩╗╠═╣║ ║║ ║╠╩╗╚═╗
