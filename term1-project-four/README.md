@@ -28,35 +28,6 @@ This project is a great step toward getting started as a blockchain developer. T
 
 [Sails.js | Realtime MVC Framework for Node.js](https://sailsjs.com/)
 
-## API Endpoints
-
-**Validate User Request**
-This signature proves the users blockchain identity. Upon validation of this identity, the user should be granted access to register a single star.
-
-*URL*
-This functionality should be made available at the following URL.
-http://localhost:8000/requestValidation
-
-
-*Example: requestValidation endpoint*
-Here is an example post request using curl.
-```
-curl -X "POST" "http://localhost:8000/requestValidation" \
-     -H 'Content-Type: application/json; charset=utf-8' \
-     -d $'{
-  "address": "142BDCeSGbXjWKaAnYXbMpZ6sbrSAo3DpZ"
-}'
-```
-*Example: JSON response*
-Your application will provide a JSON response to users. Here is an example of this response.
-{
-  "address": "142BDCeSGbXjWKaAnYXbMpZ6sbrSAo3DpZ",
-  "requestTimeStamp": "1532296090",
-  "message": "142BDCeSGbXjWKaAnYXbMpZ6sbrSAo3DpZ:1532296090:starRegistry",
-  "validationWindow": 300
-}
-```
-
 ## Installation
 
 Install dependent node packages
@@ -73,16 +44,82 @@ Start the Sails application:
 sails lift
 ```
 
-Using [Postman](https://www.getpostman.com/) or a similar tool, send requests to the endpoints as follows:
+**Validate User Request**
+This signature proves the users blockchain identity. Upon validation of this identity, the user should be granted access to register a single star.
 
-GET /block/{BLOCK_HEIGHT}
+*URL*
+This functionality should be made available at the following URL.
+http://localhost:8000/requestValidation
+
+
+*Example: requestValidation endpoint*
+Here is an example post request using curl.
+```
+curl -X "POST" "http://localhost:8000/requestValidation" \
+     -H 'Content-Type: application/json; charset=utf-8' \
+     -d $'{ "address": "142BDCeSGbXjWKaAnYXbMpZ6sbrSAo3DpZ"}'
+```
+*Example: JSON response*
+Your application will provide a JSON response to users. Here is an example of this response.
+```
+{
+  "address": "142BDCeSGbXjWKaAnYXbMpZ6sbrSAo3DpZ",
+  "requestTimeStamp": "1532296090",
+  "message": "142BDCeSGbXjWKaAnYXbMpZ6sbrSAo3DpZ:1532296090:star Registry",
+  "validationWindow": 300
+}
+```
+
+**Allow User Message Signature**
+After receiving the response, users will prove their blockchain identity by signing a message with their wallet. Once they sign this message, the application will validate their request and grant access to register a star.
+
+*URL*
+This functionality should be made available at the following URL.
+http://localhost:8000/message-signature/validate
+
+*Payload*
+The payload delivered by the user requires the following fields.
+
+* Wallet address
+* Message signature
+
+*Message Configuration*
+Message for verification can be configured within the application logic from validation request.
 
 ```
- curl http://localhost:8000/block/0
+[walletAddress]:[timeStamp]:starRegistry
 ```
 
-POST /block
-
+*JSON Response*
 ```
-curl -X "POST" "http://localhost:8000/block" -H 'Content-Type: application/json' -d $'{"body":"Block description"}'
+Success/fail
+```
+
+*Example*
+```
+message-signature/validate endpoint
+```
+
+*Post validation with curl*
+```
+curl -X "POST" "http://localhost:8000/message-signature/validate" \
+     -H 'Content-Type: application/json; charset=utf-8' \
+     -d $'{
+  "address": "142BDCeSGbXjWKaAnYXbMpZ6sbrSAo3DpZ",
+  "signature": "H6ZrGrF0Y4rMGBMRT2+hHWGbThTIyhBS0dNKQRov9Yg6GgXcHxtO9GJN4nwD2yNXpnXHTWU9i+qdw5vpsooryLU="
+}'
+```
+
+*JSON Response Example*
+```
+{
+  "registerStar": true,
+  "status": {
+    "address": "142BDCeSGbXjWKaAnYXbMpZ6sbrSAo3DpZ",
+    "requestTimeStamp": "1532296090",
+    "message": "142BDCeSGbXjWKaAnYXbMpZ6sbrSAo3DpZ:1532296090:starRegistry",
+    "validationWindow": 193,
+    "messageSignature": "valid"
+  }
+}
 ```
