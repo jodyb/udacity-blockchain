@@ -30,8 +30,8 @@ module.exports.routes = {
   'GET /': 'HomeController.index',
   'POST /block': 'BlockController.create',
   'GET /block/:height': 'BlockController.findOne',
-  'POST /requestValidation': 'ValidationController.requestValidation'
-
+  'POST /requestValidation': 'ValidationController.requestValidation',
+  'POST /message-signature/validate': 'ValidationController.signatureValidation'
 
   //  ╦ ╦╔═╗╔╗ ╦ ╦╔═╗╔═╗╦╔═╔═╗
   //  ║║║║╣ ╠╩╗╠═╣║ ║║ ║╠╩╗╚═╗
