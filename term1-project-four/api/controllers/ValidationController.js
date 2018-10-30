@@ -42,5 +42,36 @@ module.exports = {
     } catch (err) {
       return res.serverError(err);
     }
+  },
+  /**
+   * `ValidationController.signatureValidation()`
+   */
+  signatureValidation: async function (req, res) {
+    try {
+      //get address from req params and verify it is present
+      let {address, signature} = req.allParams();
+      if (!address || !signature) {
+        return res.badRequest({err: 'Address and signature required'});
+      }
+
+      //retrieve timestamp of original address request
+      const timeStamp = global.walletAddressHash[address];
+      console.log(timeStamp);
+      if (!timeStamp) {
+        return res.badRequest({err: `Unable to find address ${address}`});
+      }
+
+      //determine if request in validation window
+      const currentTime =  Math.round(new Date().getTime() / 1000);
+
+      return res.json({
+        "test": "signature valiation",
+      });
+    } catch (err) {
+      return res.serverError(err);
+    }
   }
+
+
+
 };
