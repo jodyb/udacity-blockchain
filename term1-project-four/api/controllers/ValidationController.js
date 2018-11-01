@@ -5,8 +5,14 @@
  * @help        :: See https://sailsjs.com/docs/concepts/actions
  */
 
+//helper libraries
+const bitcoin = require('bitcoinjs-lib');
+const bitcoinMessage = require('bitcoinjs-message');
+
 //setup global hash for requests
 global.walletAddressHash = global.walletAddressHash || {};
+const validationWindow = 300;  //five minutes - 300 seconds
+
 module.exports = {
   /**
    * `ValidationController.requestValidation()`
@@ -30,7 +36,6 @@ module.exports = {
 
       //set up return message
       let message = `${address}:${requestTimeStamp}:starRegistry`;
-      const validationWindow = 300;  //five minutes - 300 seconds
       const timeRemaining = validationWindow - timeSinceFirstRequest;
 
       return res.json({
@@ -55,23 +60,39 @@ module.exports = {
       }
 
       //retrieve timestamp of original address request
-      const timeStamp = global.walletAddressHash[address];
-      console.log(timeStamp);
-      if (!timeStamp) {
+      const requestTimeStamp = global.walletAddressHash[address];
+      if (!requestTimeStamp) {
         return res.badRequest({err: `Unable to find address ${address}`});
       }
 
       //determine if request in validation window
       const currentTime =  Math.round(new Date().getTime() / 1000);
+      const timeElapsed = currentTime - requestTimeStamp;
+      if (timeElapsed > validationWindow) {
+        delete global.walletAddressHash[address];  //remove expired request from hash
+        return res.badRequest({err: `Request has expired for address ${address}`});
+      }
 
-      return res.json({
-        "test": "signature valiation",
-      });
+      const message = `${address}:${requestTimeStamp}:starRegistry`;
+      const timeRemaining = validationWindow - timeElapsed;
+      const validSignature = bitcoinMessage.verify(message, address, signature);
+      if (validSignature) {
+        return res.json({
+            "registerStar": true,
+            "status": {
+              "address": address,
+              "requestTimeStamp": requestTimeStamp,
+              "message": message,
+              "validationWindow": timeRemaining,
+              "messageSignature": "valid"
+            }
+        });
+      } else {
+         console.log("invalid signature");
+         return res.badRequest({err: `Invalid signature`});
+      }
     } catch (err) {
       return res.serverError(err);
     }
   }
-
-
-
 };
