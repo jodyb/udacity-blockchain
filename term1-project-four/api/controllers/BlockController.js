@@ -14,15 +14,18 @@
    */
   create: async function (req, res) {
       try {
-        //get description from req params
-        let {body} = req.allParams();
-        //check that description is present
-        if (!body) {
-          return res.badRequest({err: 'block description is required'});
-        }
+        //get parameters
+        let { address, star } = req.allParams();
+
+        //check for valid required parameters
+        if (!address) { return res.badRequest({err: 'address required'});};
+        if (!global.validatedRequests.includes(address)) { return res.badRequest({err: 'address not validated'});};
+        if (!star) { return res.badRequest({err: 'star is required'});};
+        if (!star.ra) { return res.badRequest({err: 'star right acension is required'});};
+        if (!star.dec) { return res.badRequest({err: 'star declination is required'});};
 
         //add block
-        global.blockchain.addBlock(new Block(body)).then((block) => {
+        global.blockchain.addBlock(new Block({address, star})).then((block) => {
           return res.ok(block);
         })
       } catch (err) {

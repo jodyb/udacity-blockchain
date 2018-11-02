@@ -8,5 +8,16 @@ curl -X "POST" "http://localhost:8000/message-signature/validate" \
      -H 'Content-Type: application/json; charset=utf-8' \
      -d $'{
   "address": "1Mstwzd6ToEkbCs1AoC57UGof7ick6S9di",
-  "signature": "H8IHyu3U43zUGW+2qXTFDtPdYKEPxNuFbrVn9mDrcVikSVX91/C/A59aYSr1f0YJwO7UsB+J3h1C3DgqaGTXLFY="
+  "signature": "H6PrrYl3O5YejcPVix5JimHixWwLM5NVhp6DM5SR6CXpMawMAsGvApHokDKQoV22Iv5EJCAfK7ZPwsFKmBz6C6k="
+}'
+
+curl -X "POST" "http://localhost:8000/block" \
+     -H 'Content-Type: application/json; charset=utf-8' \
+     -d $'{
+  "address": "142BDCeSGbXjWKaAnYXbMpZ6sbrSAo3DpZ",
+  "star": {
+    "dec": "-26° 29'\'' 24.9",
+    "ra": "16h 29m 1.0s",
+    "story": "Found star using https://www.google.com/sky/"
+  }
 }'

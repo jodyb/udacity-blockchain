@@ -11,6 +11,8 @@ const bitcoinMessage = require('bitcoinjs-message');
 
 //setup global hash for requests
 global.walletAddressHash = global.walletAddressHash || {};
+global.validatedRequests = global.validatedRequests || [];
+
 const validationWindow = 300;  //five minutes - 300 seconds
 
 module.exports = {
@@ -77,6 +79,7 @@ module.exports = {
       const timeRemaining = validationWindow - timeElapsed;
       const validSignature = bitcoinMessage.verify(message, address, signature);
       if (validSignature) {
+        global.validatedRequests.push(address);
         return res.json({
             "registerStar": true,
             "status": {
