@@ -7,6 +7,7 @@
  const Block = require("./Block");
  const Blockchain = require("./Blockchain");
  global.blockchain = global.blockchain || new Blockchain();
+ global.validatedRequests = global.validatedRequests || [];
 
  module.exports = {
   /**
@@ -23,9 +24,15 @@
         if (!star) { return res.badRequest({err: 'star is required'});};
         if (!star.ra) { return res.badRequest({err: 'star right acension is required'});};
         if (!star.dec) { return res.badRequest({err: 'star declination is required'});};
+        if (!star.story) { return res.badRequest({err: 'star story is required'});};
+
+        //convert star story to hex
+        star.story = Buffer.from(star.story).toString('hex')
 
         //add block
         global.blockchain.addBlock(new Block({address, star})).then((block) => {
+          global.validatedRequests = global.validatedRequests.filter(item => item !== address); //remove request
+          console.log(global.validatedRequests);
           return res.ok(block);
         })
       } catch (err) {
