@@ -31,7 +31,9 @@ module.exports.routes = {
   'POST /block': 'BlockController.create',
   'GET /block/:height': 'BlockController.findOne',
   'POST /requestValidation': 'ValidationController.requestValidation',
-  'POST /message-signature/validate': 'ValidationController.signatureValidation'
+  'POST /message-signature/validate': 'ValidationController.signatureValidation',
+  'GET /stars/hash::hash': 'StarsController.searchByHash',
+  'GET /stars/address::address': 'StarsController.searchByAddress'
 
   //  ╦ ╦╔═╗╔╗ ╦ ╦╔═╗╔═╗╦╔═╔═╗
   //  ║║║║╣ ╠╩╗╠═╣║ ║║ ║╠╩╗╚═╗

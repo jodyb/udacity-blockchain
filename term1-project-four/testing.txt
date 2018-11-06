@@ -8,7 +8,7 @@ curl -X "POST" "http://localhost:8000/message-signature/validate" \
      -H 'Content-Type: application/json; charset=utf-8' \
      -d $'{
   "address": "1Mstwzd6ToEkbCs1AoC57UGof7ick6S9di",
-  "signature": "H8dm26w2/lJt7TImENvTfY02zXIsxDjsIyutKyjCVrXMO2kcwdHJT0iBWEQpp3w9nOyBG5RPdO8UaNPSVfohOA8="
+  "signature": "H1GYd02X+6bNvj1b/tclLeakDzDglFqw1GmmW97HVvG+O7bAoXMxxN0Awz+XXHGZ5WmWzm55uesynj5JheelwLI="
 }'
 
 curl -X "POST" "http://localhost:8000/block" \
