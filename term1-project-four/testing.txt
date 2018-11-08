@@ -21,3 +21,5 @@ curl -X "POST" "http://localhost:8000/block" \
     "story": "Found star using https://www.google.com/sky/"
   }
 }'
+
+curl "http://localhost:8000/stars/address:Mstwzd6ToEkbCs1AoC57UGof7ick6S9di"
