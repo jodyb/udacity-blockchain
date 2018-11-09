@@ -22,4 +22,6 @@ curl -X "POST" "http://localhost:8000/block" \
   }
 }'
 
-curl "http://localhost:8000/stars/address:Mstwzd6ToEkbCs1AoC57UGof7ick6S9di"
+curl "http://localhost:8000/stars/address:1Mstwzd6ToEkbCs1AoC57UGof7ick6S9di"
+
+curl "http://localhost:8000/stars/hash:9fb696c61f054d53193ddd6ac094597326242505e5b13ecd039d041e4360a5be"
