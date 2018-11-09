@@ -53,6 +53,7 @@
           return res.badRequest({err: 'request outside of block range'});
         }
         global.blockchain.getBlock(height).then((block) => {
+          block.body.star.storyDecoded = Buffer.from(block.body.star.story, 'hex').toString('ascii');
           return res.ok(block);
         })
       })
