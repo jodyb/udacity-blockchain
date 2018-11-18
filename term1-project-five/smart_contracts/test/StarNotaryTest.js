@@ -56,5 +56,17 @@ contract('StarNotary', accounts => {
                 assert.equal(balanceBeforeTransaction.sub(balanceAfterTransaction), starPrice)
             })
         })
+
+        describe('star coordinates must be uniquene', () => {
+            it('cannot create a duplicate Star', async function () {
+                try {
+                  await this.contract.createStar('Star power 103!', 'I love my wonderful star', 'ra_032.155', 'dec_121.874', 'mag_245.978', 1, {from: accounts[0]})
+                  await this.contract.createStar('Star power 103!', 'I love my wonderful star', 'ra_032.155', 'dec_121.874', 'mag_245.978', 1, {from: accounts[0]})
+                  assert(false);
+                } catch (err) {
+                  assert.ok(err);
+                }
+            })
+        })
     })
 })
