@@ -1,7 +1,6 @@
 pragma solidity ^0.4.23;
 
 import 'openzeppelin-solidity/contracts/token/ERC721/ERC721.sol';
-
 contract StarNotary is ERC721 {
 
 
@@ -17,14 +16,19 @@ contract StarNotary is ERC721 {
     mapping(uint256 => uint256) public starsForSale;
     mapping(uint256 => bool) public starsRegistered;
 
+    function checkIfStarExists(string _dec, string _mag, string _cent) public view returns(bool) {
+      uint256 coordinates = uint256(keccak256(abi.encodePacked(_dec, _mag, _cent)));
+      return starsRegistered[coordinates];
+    }
+
     function createStar(string _name, string _staryStory, string _dec, string _mag, string _cent, uint256 _tokenId) public {
+        require(!checkIfStarExists(_dec, _mag, _cent));
         uint256 coordinates = uint256(keccak256(abi.encodePacked(_dec, _mag, _cent)));
-        require(starsRegistered[coordinates] == false);
         starsRegistered[coordinates] = true;
 
         Star memory newStar = Star(_name, _staryStory, _dec, _mag, _cent);
         tokenIdToStarInfo[_tokenId] = newStar;
-
+  
         _mint(msg.sender, _tokenId);
     }
 

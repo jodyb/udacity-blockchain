@@ -11,6 +11,12 @@ contract('StarNotary', accounts => {
             await this.contract.createStar('Star power 103!', 'I love my wonderful star', 'ra_032.155', 'dec_121.874', 'mag_245.978', 1, {from: accounts[0]})
             const star = await this.contract.tokenIdToStarInfo(1);
             assert.equal(star[0], 'Star power 103!');
+        })
+
+        it('return a star from tokenIdToStarInfo', async function () {
+            await this.contract.createStar('Star power 103!', 'I love my wonderful star', 'ra_032.155', 'dec_121.874', 'mag_245.978', 1, {from: accounts[0]})
+            const star = await this.contract.tokenIdToStarInfo(1);
+            assert.equal(star[0], 'Star power 103!');
             assert.equal(star[1], 'I love my wonderful star');
             assert.equal(star[2], 'ra_032.155');
             assert.equal(star[3], 'dec_121.874');
