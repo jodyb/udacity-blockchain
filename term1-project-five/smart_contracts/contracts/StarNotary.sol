@@ -28,7 +28,7 @@ contract StarNotary is ERC721 {
 
         Star memory newStar = Star(_name, _staryStory, _dec, _mag, _cent);
         tokenIdToStarInfo[_tokenId] = newStar;
-  
+
         _mint(msg.sender, _tokenId);
     }
 
@@ -52,5 +52,9 @@ contract StarNotary is ERC721 {
         if(msg.value > starCost) {
             msg.sender.transfer(msg.value - starCost);
         }
+    }
+
+    function mint(uint256 tokenId) public {
+       _mint(msg.sender, tokenId);
     }
 }
